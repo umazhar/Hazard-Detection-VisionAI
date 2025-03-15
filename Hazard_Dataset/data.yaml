@@ -1,0 +1,15 @@
+path: /home/ryanzyc/code/projects/voxel51/Hazard_Dataset
+train: train/images
+val: val/images
+names:
+  0: Candle
+  1: Stove
+  2: Toaster
+  3: Kettle
+  4: Toaster Oven
+  5: Paper Towel
+  6: Aerosol
+  7: Sanitizer
+  8: Canola Oil
+  9: Toilet Paper
+  10: Paper
