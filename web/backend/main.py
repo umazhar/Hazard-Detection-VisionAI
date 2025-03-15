@@ -1,5 +1,7 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 import cv2
 import numpy as np
 from ultralytics import YOLO
@@ -21,10 +23,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Serve static files (CSS, JS, images)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Serve HTML templates
+templates = Jinja2Templates(directory="templates")
+
 @app.get("/")
-def read_root():
-    """Health check endpoint."""
-    return {"message": "YOLO Object Detection API is running!"}
+def read_root(request: Request):
+    """Serve the frontend HTML file."""
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/detect/")
 async def detect_objects(file: UploadFile = File(...)):
@@ -50,4 +58,3 @@ async def detect_objects(file: UploadFile = File(...)):
         return {"annotated_image": img_base64}
     except Exception as e:
         return {"error": str(e)}
-
